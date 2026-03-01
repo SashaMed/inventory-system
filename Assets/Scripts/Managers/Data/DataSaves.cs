@@ -121,11 +121,6 @@ public static class DataSavesStatic
 
                 Debug.Log("Loading success");
 
-                // TODO: »справить потерю точности модели на длительном(мес€ц+) промежутке игры. 
-                // ‘лоаты не подход€т, либо оптимизировать базовое врем€.
-                // следующий код показывает проблему:
-                //(variable as SavesData.GameSavesData).timestamp = (variable as SavesData.GameSavesData).timestamp - TimeSpan.TicksPerDay * 30;
-
                 return true;
 
             }
