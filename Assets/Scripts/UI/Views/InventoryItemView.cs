@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class InventoryItemModel
 {
+    public InventoryScreen ParentScreen;
     public ItemDefinition Definition;
     public int OwnedQuantity;
 }
@@ -15,14 +16,11 @@ public class InventoryItemView : UIView<InventoryItemModel>
     [SerializeField] private TextMeshProUGUI quantityText;
     [SerializeField] private Image selectionHighlight;
 
-    public System.Action<InventoryItemModel> OnSelected;
-
-    private bool _isSelected;
+    public UIStatesBool selected;
 
     public void SetSelected(bool selected)
     {
-        _isSelected = selected;
-        if (selectionHighlight) selectionHighlight.enabled = selected;
+        this.selected.SetState(selected);
     }
 
     public override void Refresh()
@@ -31,10 +29,13 @@ public class InventoryItemView : UIView<InventoryItemModel>
         if (icon)         icon.sprite    = def.icon;
         if (nameText)     nameText.text  = def.itemName;
         if (quantityText) quantityText.text = $"x{Model.OwnedQuantity}";
+
+        this.selected.SetState(false);
+
     }
 
     public void OnItemClick()
     {
-        OnSelected?.Invoke(Model);
+        Model?.ParentScreen?.SelectItem(Model);
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using GameData;
 using UnityEngine;
 
@@ -7,31 +8,12 @@ public class InventoryScreen : UIScreen<EmptyModel>
     [SerializeField] private CoinsView coinsView;
     [SerializeField] private StatsView statsView;
 
-    [Header("Two-panel Layout")]
     [SerializeField] private UIList<InventoryItemView, InventoryItemModel> itemList;
     [SerializeField] private InventoryDetailView detailView;
 
     private InventoryItemModel _selectedModel;
 
-    public override void OnPageLoaded(bool successful)
-    {
-        if (detailView != null)
-            detailView.OnUsed = RefreshAll;
-
-        RefreshAll();
-    }
-
-    public override void OnResume()
-    {
-        RefreshAll();
-    }
-
     public override void Refresh()
-    {
-        RefreshAll();
-    }
-
-    public void RefreshAll()
     {
         coinsView?.Refresh();
         statsView?.Refresh();
@@ -43,7 +25,6 @@ public class InventoryScreen : UIScreen<EmptyModel>
     {
         _selectedModel = model;
 
-        // Update highlight on all views
         foreach (var view in itemList.Views)
             view.SetSelected(view.Model == model);
 
@@ -61,21 +42,20 @@ public class InventoryScreen : UIScreen<EmptyModel>
         {
             ownedItems.TryGetValue(item.itemId, out int qty);
             if (qty > 0)
-                models.Add(new InventoryItemModel { Definition = item, OwnedQuantity = qty });
+            {
+                models.Add(new InventoryItemModel
+                {
+                    Definition = item,
+                    OwnedQuantity = qty,
+                    ParentScreen = this
+                });
+            }
         }
 
         itemList.SetModeles(models);
 
-        // Inject selection callback and restore highlight for current selection
-        foreach (var view in itemList.Views)
-        {
-            view.OnSelected = SelectItem;
-            view.SetSelected(view.Model == _selectedModel);
-        }
+        _selectedModel = itemList.Models.FirstOrDefault();
 
-        // If selected item no longer in list (qty dropped to 0), clear selection
-        if (_selectedModel != null && !models.Contains(_selectedModel))
-            _selectedModel = null;
     }
 
     private void RefreshDetail()
@@ -93,12 +73,8 @@ public class InventoryScreen : UIScreen<EmptyModel>
         detailView.SetModel(new InventoryDetailModel
         {
             Definition    = _selectedModel.Definition,
-            OwnedQuantity = qty
+            OwnedQuantity = qty,
+            ParentScreen = this
         });
-    }
-
-    public void OnBackClick()
-    {
-        Close();
     }
 }

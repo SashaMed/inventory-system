@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0c6496f60c8dff47b0bfbeb642348a5, type: 3}
-  m_Name: click_upgrade_3
+  m_Name: multiplier_1
   m_EditorClassIdentifier: 
-  itemId: click_upgrade_3
-  itemName: Click upgrade 3
-  icon: {fileID: 21300000, guid: 4e3c49dc98f8a444ab28337dac1f094b, type: 3}
-  description: Adds addtional coins for each click
-  itemType: 0
-  basePrice: 200
-  effectValue: 10
+  itemId: Multiplier
+  itemName: multiplier_1
+  icon: {fileID: 21300000, guid: 228d69029e457c443a5eb0f973e92089, type: 3}
+  description: x2
+  itemType: 2
+  basePrice: 2000
+  effectValue: 2
   effectDuration: 30

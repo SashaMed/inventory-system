@@ -8,12 +8,11 @@ public class InventoryDetailModel
 {
     public ItemDefinition Definition;  // null = nothing selected
     public int OwnedQuantity;
+    public InventoryScreen ParentScreen;
 }
 
 public class InventoryDetailView : UIView<InventoryDetailModel>
 {
-    [SerializeField] private GameObject emptyState;     // shown when nothing selected
-    [SerializeField] private GameObject contentState;   // shown when an item is selected
 
     [SerializeField] private Image icon;
     [SerializeField] private TextMeshProUGUI nameText;
@@ -26,6 +25,8 @@ public class InventoryDetailView : UIView<InventoryDetailModel>
     [SerializeField] private Transform timersContainer;
     [SerializeField] private TextMeshProUGUI timerEntryPrefab; // simple label prefab
 
+    public UIStatesBool emptyState;
+
     // Injected by InventoryScreen so USE triggers a full refresh
     public System.Action OnUsed;
 
@@ -34,8 +35,7 @@ public class InventoryDetailView : UIView<InventoryDetailModel>
     public override void Refresh()
     {
         bool hasSelection = Model?.Definition != null;
-        if (emptyState)   emptyState.SetActive(!hasSelection);
-        if (contentState) contentState.SetActive(hasSelection);
+        emptyState.SetState(!hasSelection);
 
         if (!hasSelection) return;
 
@@ -80,6 +80,6 @@ public class InventoryDetailView : UIView<InventoryDetailModel>
     {
         if (Model?.Definition == null) return;
         EconomyManager.Instance.UseItem(Model.Definition);
-        OnUsed?.Invoke();
+        Model?.ParentScreen.Refresh();
     }
 }

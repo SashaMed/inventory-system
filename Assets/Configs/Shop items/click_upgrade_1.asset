@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: click_upgrade_1
   m_EditorClassIdentifier: 
   itemId: click_upgrade_1
-  itemName: Click upgrade
+  itemName: Click upgrade 1
   icon: {fileID: 21300000, guid: 4e3c49dc98f8a444ab28337dac1f094b, type: 3}
   description: Adds addtional coins for each click
   itemType: 0
