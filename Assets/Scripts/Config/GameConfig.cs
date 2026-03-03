@@ -16,6 +16,13 @@ public class GameConfig : ScriptableObject
     [Tooltip("Seconds between each drain increase")]
     public float drainIncreaseInterval = 30f;
 
+
+    public float drainMultiplieAmount = 1.2f;
+
+    [Tooltip("Seconds between each drain increase")]
+    public float drainMultiplieInterval = 30f;
+
+
     [Header("Click Combo")]
     [Tooltip("Max seconds between clicks to maintain a combo")]
     public float comboWindowSeconds = 0.8f;

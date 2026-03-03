@@ -17,6 +17,6 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 228d69029e457c443a5eb0f973e92089, type: 3}
   description: Shield...
   itemType: 3
-  basePrice: 50
+  basePrice: 200
   effectValue: 10
-  effectDuration: 30
+  effectDuration: 10

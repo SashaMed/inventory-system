@@ -31,3 +31,11 @@ public class ItemDefinition : ScriptableObject
         };
     }
 }
+
+public enum ItemType
+{
+    ClickUpgrade,
+    Generator,
+    Multiplier,
+    Shield
+}

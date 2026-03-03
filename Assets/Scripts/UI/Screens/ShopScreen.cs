@@ -12,11 +12,10 @@ public class ShopScreen : UIScreen<EmptyModel>
         PopulateList();
     }
 
-    // Refresh when returning from a deeper screen (coin balance may have changed)
     public override void OnResume()
     {
         coinsView?.Refresh();
-        shopList.Refresh(); // re-check afford state for each item
+        shopList.Refresh(); 
     }
 
     public override void Refresh()
@@ -35,7 +34,6 @@ public class ShopScreen : UIScreen<EmptyModel>
 
         shopList.SetModeles(models);
 
-        // Inject purchase callback into each view so BUY triggers a refresh
         foreach (var view in shopList.Views)
             view.OnPurchased = Refresh;
     }

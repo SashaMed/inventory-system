@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3405e9c982cd0074590a2da5b72f24a9, type: 3}
   m_Name: GameConfig
   m_EditorClassIdentifier: 
-  startingCoins: 50
-  baseDrainRate: 1
-  drainIncreaseAmount: 0.5
-  drainIncreaseInterval: 30
-  comboWindowSeconds: 0.8
+  startingCoins: 51
+  baseDrainRate: 3
+  drainIncreaseAmount: 2
+  drainIncreaseInterval: 15
+  drainMultiplieAmount: 1.2
+  drainMultiplieInterval: 30
+  comboWindowSeconds: 0.5
   maxCombo: 4
   comboMultipliers:
   - 1
@@ -27,3 +29,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 89f44f4086d50674ea19e42601231b8e, type: 2}
   - {fileID: 11400000, guid: 06a1b44c405beff48997ca84b1aeedf2, type: 2}
   - {fileID: 11400000, guid: e428c31f5e731314181ea43b49c251ca, type: 2}
+  - {fileID: 11400000, guid: b45efa31bd70cce48b575eda8e95f28b, type: 2}
+  - {fileID: 11400000, guid: b74a14bbb6a25034d8e2dfc44ecb3727, type: 2}
+  - {fileID: 11400000, guid: fed7eb757304b0047b1367a05650fddc, type: 2}
+  - {fileID: 11400000, guid: 672fe810fbeb3114f851e74608f7250c, type: 2}

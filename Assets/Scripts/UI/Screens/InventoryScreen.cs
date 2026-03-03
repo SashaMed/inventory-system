@@ -31,7 +31,7 @@ public class InventoryScreen : UIScreen<EmptyModel>
         RefreshDetail();
     }
 
-    // ── Private helpers ───────────────────────────────────────────────────────
+
 
     private void RebuildList()
     {

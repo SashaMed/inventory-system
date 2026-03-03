@@ -15,7 +15,6 @@ public class MainMenuScreen : UIScreen<EmptyModel>
         statsView?.Refresh();
     }
 
-    // Called when this screen becomes the top screen again (e.g. back from Shop)
     public override void OnResume()
     {
         if (eco == null)
@@ -34,7 +33,6 @@ public class MainMenuScreen : UIScreen<EmptyModel>
         eco.OnEconomyChanged -= Refresh;
     }
 
-    // Also subscribe when first shown
     public override void OnPageLoaded(bool successful)
     {
         if (eco == null)
@@ -44,7 +42,6 @@ public class MainMenuScreen : UIScreen<EmptyModel>
         eco.OnEconomyChanged += Refresh;
     }
 
-    // ── Button handlers ───────────────────────────────────────────────────────
 
     public void OnIdleClick()
     {

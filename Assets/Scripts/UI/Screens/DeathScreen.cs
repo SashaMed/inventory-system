@@ -28,7 +28,6 @@ public class DeathScreen : UIScreen<DeathModel>
             totalEarnedText.text = $"Total earned: {CoinsView.FormatCoins(Model.totalCoinsEarned)}";
     }
 
-    // Wired via Button OnClick in the Inspector
     public void OnTryAgainClick()
     {
         EconomyManager.Instance.ResetGame();

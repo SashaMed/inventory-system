@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Central manager for all game economy: coins, drain, item effects, combo, and death.
 public class EconomyManager : MonoBehaviourSingleton<EconomyManager>
 {
     public event Action OnDeath;
@@ -12,21 +11,18 @@ public class EconomyManager : MonoBehaviourSingleton<EconomyManager>
 
     public GameConfig Config { get; private set; }
 
-    // Cached item lookup built from GameConfig.shopItems
     private Dictionary<string, ItemDefinition> _itemLookup = new();
 
-    // Combo tracking
     private float _lastClickTime = -999f;
     private int _comboLevel = 1;
 
-    // Death guard — ensures OnDeath fires only once per run
     private bool _isDead;
 
-    // Auto-save timer
+
     private float _saveTimer;
     private const float SaveInterval = 5f;
 
-    // ── Computed economy stats ────────────────────────────────────────────────
+
 
     public float CoinsPerClick
     {
@@ -81,13 +77,14 @@ public class EconomyManager : MonoBehaviourSingleton<EconomyManager>
         {
             float survivalTime = GameSaves.Data.currentRunSurvivalTime;
             float levels = Mathf.Floor(survivalTime / Config.drainIncreaseInterval);
-            return Config.baseDrainRate + levels * Config.drainIncreaseAmount;
+            float multiplieLevels = survivalTime / Config.drainMultiplieInterval;
+            float multiplieAmount = multiplieLevels > 1 ? multiplieLevels * Config.drainMultiplieAmount : 1;
+            return (Config.baseDrainRate + levels * Config.drainIncreaseAmount) * multiplieAmount;
         }
     }
 
     public int CurrentComboLevel => _comboLevel;
 
-    // ── Initialisation ────────────────────────────────────────────────────────
 
     public void Init(GameConfig config)
     {
@@ -97,8 +94,6 @@ public class EconomyManager : MonoBehaviourSingleton<EconomyManager>
         foreach (var item in config.shopItems)
             _itemLookup[item.itemId] = item;
 
-        // Guarantee save data exists — LoadAndCheck must be called before Init,
-        // but we defensively ensure it here in case execution order shifts.
         if (GameSaves.Data == null)
             GameSaves.LoadAndCheck();
 
@@ -108,7 +103,6 @@ public class EconomyManager : MonoBehaviourSingleton<EconomyManager>
         _isDead = false;
     }
 
-    // ── Unity Update ─────────────────────────────────────────────────────────
 
     protected void Update()
     {
@@ -121,12 +115,12 @@ public class EconomyManager : MonoBehaviourSingleton<EconomyManager>
 
         TickActiveEffects(dt, data);
 
-        // Passive income
+
         float income = CoinsPerSec * Multiplier * dt;
         data.currentCoins += income;
         data.totalCoinsEarned += income;
 
-        // Drain (skipped when shield is active)
+
         if (!ShieldActive)
             data.currentCoins -= CurrentDrain * dt;
 
@@ -139,7 +133,6 @@ public class EconomyManager : MonoBehaviourSingleton<EconomyManager>
             return;
         }
 
-        // Periodic save to avoid hammering disk every frame
         _saveTimer += dt;
         if (_saveTimer >= SaveInterval)
         {
@@ -162,13 +155,11 @@ public class EconomyManager : MonoBehaviourSingleton<EconomyManager>
                 anyExpired = true;
             }
         }
-        // No extra action needed on expiry; computed properties re-evaluate each frame.
         _ = anyExpired;
     }
 
     // ── Public API ────────────────────────────────────────────────────────────
 
-    // Returns the combo level used for this click (1-4), useful for UI feedback.
     public int Click()
     {
         float now = Time.time;
@@ -247,7 +238,6 @@ public class EconomyManager : MonoBehaviourSingleton<EconomyManager>
         return qty;
     }
 
-    // Returns all active effects (remainingTime > 0) — safe read-only enumeration
     public IEnumerable<ActiveEffect> ActiveEffects()
     {
         foreach (var e in GameSaves.Data.activeEffects)
@@ -255,7 +245,6 @@ public class EconomyManager : MonoBehaviourSingleton<EconomyManager>
                 yield return e;
     }
 
-    // Returns active effects for a specific item
     public IEnumerable<ActiveEffect> ActiveEffectsFor(string itemId)
     {
         foreach (var e in ActiveEffects())
@@ -263,7 +252,6 @@ public class EconomyManager : MonoBehaviourSingleton<EconomyManager>
                 yield return e;
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
 
     private ItemDefinition GetDef(string itemId) =>
         _itemLookup.TryGetValue(itemId, out var def) ? def : null;
